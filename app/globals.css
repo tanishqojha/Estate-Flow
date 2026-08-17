@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.488 0.198 259.8);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.488 0.198 259.8);
+  --success: oklch(0.627 0.17 149.2);
+  --warning: oklch(0.769 0.161 70.1);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.623 0.188 259.8);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.623 0.188 259.8);
+  --success: oklch(0.696 0.17 149.2);
+  --warning: oklch(0.795 0.161 70.1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Mobile-first: prevent pull-to-refresh clashes with sticky action bars */
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* Data-viz tokens — reference palette (validated); dark steps are selected,
+   not auto-flipped. Charts reference roles, never raw hex. */
+:root {
+  --viz-series-1: #2a78d6;
+  --viz-good: #0ca30c;
+  --viz-critical: #d03b3b;
+  --viz-ink: #0b0b0b;
+  --viz-ink-secondary: #52514e;
+  --viz-muted: #898781;
+  --viz-grid: #e1e0d9;
+  --viz-baseline: #c3c2b7;
+  --viz-track: #f0efec;
+}
+.dark {
+  --viz-series-1: #3987e5;
+  --viz-good: #0ca30c;
+  --viz-critical: #d03b3b;
+  --viz-ink: #ffffff;
+  --viz-ink-secondary: #c3c2b7;
+  --viz-muted: #898781;
+  --viz-grid: #2c2c2a;
+  --viz-baseline: #383835;
+  --viz-track: #383835;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --viz-series-1: #3987e5;
+    --viz-ink: #ffffff;
+    --viz-ink-secondary: #c3c2b7;
+    --viz-grid: #2c2c2a;
+    --viz-baseline: #383835;
+    --viz-track: #383835;
+  }
+}
+
+/* Thumb-reach tap targets (Rules.md §7): minimum 44px interactive height on touch */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  a.tap-target,
+  input,
+  select {
+    min-height: 44px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion system
+   Entrances animate from a hidden keyframe to the element's natural, visible
+   base state — the base style is never hidden, so with animations disabled
+   (reduced-motion, headless renders) content stays fully visible. Motion here
+   conveys data (bars growing to their magnitude) or feedback, never decoration.
+   --------------------------------------------------------------------------- */
+@keyframes ip-rise-y {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes ip-grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* SVG bar: grows up from its baseline. transform-box keeps the origin local. */
+@utility chart-bar-y {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: ip-rise-y 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* DOM bar: grows out from the left edge (scaleX keeps the labelled width). */
+@utility chart-bar-x {
+  transform-origin: left center;
+  animation: ip-grow-x 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-bar-y,
+  .chart-bar-x,
+  [class*="chart-bar"] {
+    animation: none !important;
+    transform: none !important;
+  }
+}
